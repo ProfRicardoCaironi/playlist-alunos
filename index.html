@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist dos Alunos</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; }
+        #playlist { list-style: none; padding: 0; }
+        li { cursor: pointer; padding: 5px; background: white; margin: 5px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>Playlist dos Alunos 🎵</h2>
+    <audio id="audioPlayer" controls></audio>
+    <ul id="playlist"></ul>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playlist = document.getElementById('playlist');
+
+        function fetchPlaylist() {
+            fetch('playlist.json')
+                .then(response => response.json())
+                .then(files => {
+                    playlist.innerHTML = '';
+                    files.forEach(file => {
+                        const li = document.createElement('li');
+                        li.textContent = file.split('/').pop(); // Mostra só o nome do arquivo
+                        li.addEventListener('click', () => {
+                            audioPlayer.src = file;
+                            audioPlayer.play();
+                        });
+                        playlist.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar a playlist:', error));
+        }
+
+        fetchPlaylist();
+    </script>
+</body>
+</html>
